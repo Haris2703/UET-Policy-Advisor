@@ -111,7 +111,7 @@ st.markdown('<p class="subtitle">Next-Gen Academic Intelligence</p>', unsafe_all
 # --- 5. CHAT LOGIC ---
 if vector_db is not None:
     # 🗝️ APNI KEY DALAIN
-    GEMINI_API_KEY = "YAHAN_APNI_WORKING_KEY_DALAIN"
+    GEMINI_API_KEY = "AIzaSyANC16GwDWf3usRkYyGnA3dZkHrffiwfW4"
     genai.configure(api_key=GEMINI_API_KEY)
 
     if "messages" not in st.session_state:
@@ -139,3 +139,4 @@ if vector_db is not None:
                     st.error(f"Neural Error: {e}")
 else:
     st.warning("⚠️ Waiting for UET_Rules.pdf. Make sure it's in the root of your GitHub repo.")
+
