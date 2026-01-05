@@ -121,8 +121,7 @@ st.markdown('<p class="subtitle">Next-Gen Academic Intelligence</p>',
 
 @st.cache_resource
 def load_engine():
-    pdf_path = os.path.join(os.path.dirname(__file__),
-                            "Knowledge_Base", "UET_Rules.pdf")
+    pdf_path = os.path.join(os.path.dirname(__file__), "UET_Rules.pdf")
     if os.path.exists(pdf_path):
         loader = PyPDFLoader(pdf_path)
         chunks = RecursiveCharacterTextSplitter(
@@ -171,3 +170,4 @@ if vector_db:
                     st.error(f"Neural Error: {e}")
 else:
     st.error("UET_Rules.pdf not found!")
+
