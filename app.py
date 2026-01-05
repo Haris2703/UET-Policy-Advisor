@@ -23,20 +23,31 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# --- 2. ENGINE (Isme Path Fix Hai) ---
 @st.cache_resource
 def load_engine():
-    # GitHub par file baahar hai, isliye seedha naam likha hai
-    pdf_path = "UET_Rules.pdf" 
+    # Yeh 3 linein har kism ka rasta check karengi
+    possible_paths = ["UET_Rules.pdf", "./UET_Rules.pdf"]
+    pdf_path = None
     
-    if os.path.exists(pdf_path):
-        loader = PyPDFLoader(pdf_path)
-        chunks = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=150).split_documents(loader.load())
-        embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-        return FAISS.from_documents(chunks, embeddings)
-    return None
-
-vector_db = load_engine()
+    for p in possible_paths:
+        if os.path.exists(p):
+            pdf_path = p
+            break
+            
+    if pdf_path:
+        try:
+            loader = PyPDFLoader(pdf_path)
+            chunks = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=150).split_documents(loader.load())
+            embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+            return FAISS.from_documents(chunks, embeddings)
+        except Exception as e:
+            st.error(f"PDF Reading Error: {e}")
+            return None
+    else:
+        # Yeh line aapko bataye gi ke Streamlit ko kon konsi files nazar aa rahi hain
+        files_in_dir = os.listdir('.')
+        st.error(f"File not found! Available files: {files_in_dir}")
+        return Nones
 
 # --- 3. SIDEBAR ---
 with st.sidebar:
@@ -76,3 +87,4 @@ if vector_db:
                     st.error(f"Error: {e}")
 else:
     st.error("UET_Rules.pdf NOT FOUND! Check if file is on GitHub root.")
+
